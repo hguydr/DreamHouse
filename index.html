@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дом Мечты - Создайте свой уют</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Дом Мечты</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Главная</a></li>
+                <li class="nav-item"><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li class="nav-item"><a href="builder.html" class="nav-link">Конструктор</a></li>
+                <li class="nav-item"><a href="contacts.html" class="nav-link">Контакты</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title animate-fade-in">Создайте дом своей мечты</h1>
+            <p class="hero-subtitle animate-fade-in-delay">Индивидуальное проектирование домов под ключ с гарантией качества</p>
+            <div class="hero-buttons animate-fade-in-delay-2">
+                <a href="catalog.html" class="btn btn-primary">Выбрать проект</a>
+                <a href="builder.html" class="btn btn-secondary">Создать свой</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="images/house1.png" alt="Современный дом">
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <div class="features-grid">
+                <div class="feature-card animate-slide-up">
+                    <div class="feature-icon">🏠</div>
+                    <h3>Индивидуальный подход</h3>
+                    <p>Каждый проект создается с учетом ваших пожеланий и потребностей</p>
+                </div>
+                <div class="feature-card animate-slide-up-delay">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Сроки от 3 месяцев</h3>
+                    <p>Быстрое строительство без потери качества благодаря отработанной технологии</p>
+                </div>
+                <div class="feature-card animate-slide-up-delay-2">
+                    <div class="feature-icon">💰</div>
+                    <h3>Прозрачная цена</h3>
+                    <p>Фиксированная стоимость в договоре, без скрытых платежей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Популярные проекты -->
+    <section class="popular-projects">
+        <div class="container">
+            <h2 class="section-title">Популярные проекты</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="images/лщеувяр.png" alt="Современный коттедж">
+                    <div class="project-info">
+                        <h3>Современный коттедж 'Эклипс'</h3>
+                        <p>Площадь: 145 м²</p>
+                        <p>Срок: 8-10 месяца</p>
+                        <span class="project-price">7 200 000 ₽</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="images/classichouse.png" alt="Классический дом">
+                    <div class="project-info">
+                        <h3>Классический дом 'Хармони'</h3>
+                        <p>Площадь: 135 м²</p>
+                        <p>Срок: 9-10 месяца</p>
+                        <span class="project-price">4 200 000 ₽</span>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="images/villa.webp" alt="Загородная вилла">
+                    <div class="project-info">
+                        <h3>Классическая вилла 'Аурелия'</h3>
+                        <p>Площадь: 120 м²</p>
+                        <p>Срок: 10-12 месяцев</p>
+                        <span class="project-price">6 800 000 ₽</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="catalog.html" class="btn btn-outline">Смотреть все проекты</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Дом Мечты</h3>
+                    <p>Создаем дома, в которые хочется возвращаться</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>+7 (963) 960-38-36</p>
+                    <p>info@dommechti.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Адрес</h4>
+                    <p>г. Москва, ул. Строителей, 15</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+     <div id="welcomeOverlay" class="welcome-overlay">
+        <div class="decoration"></div>
+        <div class="decoration"></div>
+        <div class="decoration"></div>
+        
+        <div class="welcome-container">
+            <div id="welcomeText" class="welcome-text"></div>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/snowfall.js"></script>
+<script>
+    // Создаем объект с параметрами по умолчанию
+    let defaultParams = {
+        count: "100", // number of snowflakes
+        minRadius: "10", // minimum radius of a snowflake in pixels
+        maxRadius: "30", // maximum radius of a snowflake in pixels
+        minSpeed: "3", // minimum speed of a snowflake in pixels per frame
+        maxSpeed: "10", // maximum speed of a snowflake in pixels per frame
+        text: "❄", // text for a snowflake (can be any symbol or text)
+        color: "#99ccff", // color of a snowflake in HEX format
+        zIndex: "1000" // z-index for the snowflakes canvas
+    };
+
+    // Создаем снегопад с параметрами по умолчанию
+    let snowfall = new Snowfall();
+
+    // Находим форму на странице
+    let form = document.getElementById("form");
+    // Находим кнопку "Default" на странице
+    let defaultButton = document.getElementById("default");
+
+    // Добавляем обработчик события на форму
+    form.addEventListener("submit", event => {
+        // Отменяем действие по умолчанию (отправку формы)
+        event.preventDefault();
+        // Создаем пустой объект для новых параметров
+        let newParams = {};
+        // Перебираем все элементы input в форме
+        for (let input of form.elements) {
+            // Если элемент имеет атрибут name, то добавляем его в объект новых параметров
+            if (input.name) {
+                newParams[input.name] = input.value;
+            }
+        }
+
+        // Удаляем старый снегопад
+        snowfall.destroy();
+        // Создаем новый снегопад с новыми параметрами
+        snowfall = new Snowfall(newParams);
+    });
+
+    // Добавляем обработчик события на кнопку "Default"
+    defaultButton.addEventListener("click", () => {
+        // Удаляем старый снегопад
+        snowfall.destroy();
+        // Создаем новый снегопад с параметрами по умолчанию
+        snowfall = new Snowfall();
+        // Перебираем все элементы input в форме
+        for (let input of form.elements) {
+            // Если элемент имеет атрибут name, то устанавливаем его значение равным значению по умолчанию
+            if (input.name) {
+                input.value = defaultParams[input.name];
+            }
+        }
+    });
+</script>
+</body>
+</html>

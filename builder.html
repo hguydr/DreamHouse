@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор дома - Дом Мечты</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <link rel="stylesheet" href="styles/buildermodal.css">
+    <style>
+        /* Новый дизайн конструктора */
+        .builder-hero {
+            background: linear-gradient(135deg, #2c5530 0%, #1e3a23 100%);
+            color: white;
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .builder-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .builder-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #e8f5e8 100%);
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .builder-container {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 80vh;
+        }
+        
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .builder-controls {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 
+                0 20px 40px rgba(44, 85, 48, 0.1),
+                0 0 0 1px rgba(44, 85, 48, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 0.3s forwards;
+        }
+        
+        .builder-preview {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 40px rgba(44, 85, 48, 0.1),
+                0 0 0 1px rgba(44, 85, 48, 0.05);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 0.5s forwards;
+        }
+        
+        .control-section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f8f9fa;
+            position: relative;
+        }
+        
+        .control-section::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2c5530, #4a7c59);
+            transition: width 0.6s ease;
+        }
+        
+        .control-section:hover::before {
+            width: 100%;
+        }
+        
+        .control-section h3 {
+            margin-bottom: 20px;
+            color: #2c5530;
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .control-section h3::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4a7c59;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        .option-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .option-group.horizontal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .option {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 110px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(44, 85, 48, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #4a7c59;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(44, 85, 48, 0.15);
+        }
+        
+        .option:hover::after {
+            opacity: 1;
+        }
+        
+        .option.selected {
+            border-color: #2c5530;
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(44, 85, 48, 0.2);
+        }
+        
+        .option.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 20px;
+            height: 20px;
+            background: #2c5530;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounceIn 0.6s ease;
+        }
+        
+        .option img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            transition: all 0.4s ease;
+            filter: grayscale(0.3);
+        }
+        
+        .option:hover img {
+            transform: scale(1.1);
+            filter: grayscale(0);
+        }
+        
+        .option.selected img {
+            transform: scale(1.05);
+            filter: grayscale(0);
+        }
+        
+        .option span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            transition: color 0.3s ease;
+        }
+        
+        .option.selected span {
+            color: #2c5530;
+            font-weight: 700;
+        }
+        
+        .slider-container {
+            padding: 0 10px;
+            position: relative;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #e9ecef 0%, #4a7c59 100%);
+            outline: none;
+            margin: 25px 0;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #2c5530;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(44, 85, 48, 0.3);
+            border: 3px solid white;
+            transition: all 0.3s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            background: #1e3a23;
+            transform: scale(1.2);
+        }
+        
+        .range-value {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 700;
+            color: #2c5530;
+            font-size: 1.1rem;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .range-value:hover {
+            border-color: #4a7c59;
+            transform: scale(1.05);
+        }
+        
+        .preview-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .house-preview {
+            height: 400px;
+            overflow: hidden;
+            position: relative;        }
+        
+        #previewImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .preview-overlay {
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(44, 85, 48, 0.95));
+            color: white;
+            padding: 30px;
+            transform: translateY(100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .house-preview:hover .preview-overlay {
+            transform: translateY(0);
+        }
+        
+        .project-info {
+            padding: 30px;
+            background: white;
+        }
+        
+        .project-info h3 {
+            margin-bottom: 25px;
+            color: #2c5530;
+            font-size: 1.5rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .project-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2c5530, #4a7c59);
+            border-radius: 2px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f8f9fa;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .info-item::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #4a7c59;
+            transition: width 0.3s ease;
+        }
+        
+        .info-item:hover::before {
+            width: 100%;
+        }
+        
+        .info-item:hover {
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: -10px;
+            margin-right: -10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .info-item.total {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #2c5530;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px solid #f8f9fa;
+            background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px -10px 0;
+        }
+        
+        .info-item.total:hover {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-save {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 20px rgba(44, 85, 48, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-save::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(44, 85, 48, 0.4);
+        }
+        
+        .btn-save:hover::before {
+            left: 100%;
+        }
+        
+        .btn-save:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Анимации */
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(255,255,255,0.8);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(180deg);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .builder-layout {
+                grid-template-columns: 380px 1fr;
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .builder-controls {
+                position: static;
+            }
+            
+            .option-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .builder-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .option-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .house-preview {
+                height: 300px;
+            }
+            
+            .builder-controls,
+            .builder-preview {
+                padding: 25px;
+            }
+            
+            .control-section {
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .builder-hero {
+                padding: 120px 0 60px;
+            }
+            
+            .builder-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .builder-container {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal flip" id="flipModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Заполните данные</h2>
+                <button class="close-btn" onclick="closeModal('flipModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Комментарий к заказу</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Расскажите о вашем проекте..."></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-save" onclick="orderProject()">Заказать проект</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Дом Мечты</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="catalog.html" class="nav-link">Каталог</a></li>
+                <li class="nav-item"><a href="builder.html" class="nav-link active">Конструктор</a></li>
+                <li class="nav-item"><a href="contacts.html" class="nav-link">Контакты</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="builder-hero">
+        <div class="container">
+            <h1 class="animate-fade-in">Конструктор вашего дома</h1>
+            <p class="animate-fade-in-delay">Создайте дом мечты по вашим параметрам</p>
+        </div>
+    </section>
+
+    <section class="builder-container">
+        <div class="container">
+            <div class="builder-layout">
+                <div class="builder-controls">
+                    <div class="control-section">
+                        <h3>Тип дома</h3>
+                        <div class="option-group">
+                            <div class="option" data-type="house" data-value="cottage">
+                                <img src="images/лщеувяр.png" alt="Коттедж">
+                                <span>Коттедж</span>
+                            </div>
+                            <div class="option" data-type="house" data-value="villa">
+                                <img src="images/villa.webp" alt="Вилла">
+                                <span>Вилла</span>
+                            </div>
+                            <div class="option" data-type="house" data-value="duplex">
+                                <img src="images/dupleks.jpg" alt="Дуплекс">
+                                <span>Дуплекс</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Материал</h3>
+                        <div class="option-group">
+                            <div class="option" data-type="material" data-value="brick">
+                                <img src="images/kirpich.webp" alt="Кирпич">
+                                <span>Кирпич</span>
+                            </div>
+                            <div class="option" data-type="material" data-value="wood">
+                                <img src="images/derevo.webp" alt="Дерево">
+                                <span>Дерево</span>
+                            </div>
+                            <div class="option" data-type="material" data-value="concrete">
+                                <img src="images/beton.webp" alt="Бетон">
+                                <span>Бетон</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Стиль</h3>
+                        <div class="option-group">
+                            <div class="option" data-type="style" data-value="modern">
+                                <img src="images/лщеувяр.png" alt="Современный">
+                                <span>Современный</span>
+                            </div>
+                            <div class="option" data-type="style" data-value="classic">
+                                <img src="images/classichouse.png" alt="Классический">
+                                <span>Классический</span>
+                            </div>
+                            <div class="option" data-type="style" data-value="scandinavian">
+                                <img src="images/scandinavskiy.jpg" alt="Скандинавский">
+                                <span>Скандинавский</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Площадь</h3>
+                        <div class="slider-container">
+                            <input type="range" id="areaRange" min="50" max="300" value="120" class="slider">
+                            <div class="range-value"><span id="areaValue">120</span> м²</div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3>Этажность</h3>
+                        <div class="option-group horizontal">
+                            <div class="option" data-type="floors" data-value="1">1 этаж</div>
+                            <div class="option" data-type="floors" data-value="2">2 этажа</div>
+                            <div class="option" data-type="floors" data-value="3">3 этажа</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-save" onclick="openModal('flipModal')">Оформить заказ</button>
+                </div>
+
+                <div class="builder-preview">
+                    <div class="preview-container">
+                        <div class="house-preview">
+                            <img src="https://images.unsplash.com/photo-1600585154340-ffffdafc687e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Предпросмотр дома" id="previewImage">
+                            <div class="preview-overlay">
+                                <h3>Ваш дом мечты</h3>
+                                <p>Каждый элемент выбран специально для вас</p>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h3>Ваш проект</h3>
+                            <div class="info-item">
+                                <span>Тип:</span>
+                                <span id="infoType">Коттедж</span>
+                            </div>
+                            <div class="info-item">
+                                <span>Материал:</span>
+                                <span id="infoMaterial">Кирпич</span>
+                            </div>
+                            <div class="info-item">
+                                <span>Стиль:</span>
+                                <span id="infoStyle">Современный</span>
+                            </div>
+                            <div class="info-item">
+                                <span>Площадь:</span>
+                                <span id="infoArea">120 м²</span>
+                            </div>
+                            <div class="info-item">
+                                <span>Этажность:</span>
+                                <span id="infoFloors">2 этажа</span>
+                            </div>
+                            <div class="info-item total">
+                                <span>Примерная стоимость:</span>
+                                <span id="infoPrice">3 200 000 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Дом Мечты</h3>
+                    <p>Создаем дома, в которые хочется возвращаться</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>+7 (963) 960-38-36</p>
+                    <p>info@dommechti.ru</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Адрес</h4>
+                    <p>г. Москва, ул. Строителей, 15</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Функция открытия модального окна
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+            
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal-backdrop')) {
+                const modal = event.target.closest('.modal');
+                closeModal(modal.id);
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+    </script>
+
+    <script src="js/snowfall.js"></script>
+    <script>
+        // Снегопад
+        let snowfall = new Snowfall();
+    </script>
+
+    <script src="js/main.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/house-builder.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>
